@@ -16,4 +16,7 @@ migratedown:
 sqlc:
 	sqlc generate
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc
+unit_test_run:
+	go test -v -coverpkg=./... -coverprofile=coverage.out ./...
+
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc unit_test_run

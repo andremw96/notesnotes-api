@@ -19,12 +19,12 @@ INSERT INTO users (
 `
 
 type CreateUsersParams struct {
-	FullName  sql.NullString `json:"full_name"`
-	FirstName sql.NullString `json:"first_name"`
+	FullName  string         `json:"full_name"`
+	FirstName string         `json:"first_name"`
 	LastName  sql.NullString `json:"last_name"`
-	Username  sql.NullString `json:"username"`
-	Email     sql.NullString `json:"email"`
-	Password  sql.NullString `json:"password"`
+	Username  string         `json:"username"`
+	Email     string         `json:"email"`
+	Password  string         `json:"password"`
 }
 
 func (q *Queries) CreateUsers(ctx context.Context, arg CreateUsersParams) (User, error) {
@@ -134,11 +134,11 @@ RETURNING id, full_name, first_name, last_name, username, email, password, creat
 
 type UpdateUserParams struct {
 	ID        int32          `json:"id"`
-	FirstName sql.NullString `json:"first_name"`
+	FirstName string         `json:"first_name"`
 	LastName  sql.NullString `json:"last_name"`
-	FullName  sql.NullString `json:"full_name"`
-	Email     sql.NullString `json:"email"`
-	Password  sql.NullString `json:"password"`
+	FullName  string         `json:"full_name"`
+	Email     string         `json:"email"`
+	Password  string         `json:"password"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
