@@ -7,9 +7,12 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
  
+make: *** No rule to make target `all'.  Stop.
 
-# Make data base, printed on Fri Jun  3 08:41:41 2022
 
+# Make data base, printed on Fri Jun  3 15:56:50 2022
+
+ 
 # Variables
 
 # environment
@@ -43,7 +46,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-8e790083-0c86-4fb4-88b8-137e9c507d92.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-df61e83c-b4f6-4c44-b5fa-8360253aa3c2.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -106,6 +109,7 @@ MAKECMDGOALS := all
 SHLVL = 1
 # default
 MAKE_VERSION := 3.81
+ 
 # environment
 USER = quipperindonesia
 # makefile
@@ -196,6 +200,7 @@ postgres:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
+ 
 #  commands to execute (from `Makefile', line 2):
 	docker run --name postgres -p 5432:5432  -e POSTGRES_USER=root -e POSTGRES_PASSWORD=quipper123 -d postgres
 	
@@ -209,7 +214,7 @@ all:
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc unit_test_run
+.PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -219,8 +224,17 @@ sqlc:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 17):
+#  commands to execute (from `Makefile', line 20):
 	sqlc generate
+	
+
+createnewmigration:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 11):
+	migrate create -ext sql -dir db/migration -seq $(ARGS)
 	
 
 # Not a target:
@@ -232,7 +246,7 @@ sqlc:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-27 15:35:17
+#  Last modified 2022-06-03 09:31:44
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -252,7 +266,7 @@ unit_test_run:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 20):
+#  commands to execute (from `Makefile', line 23):
 	go test -v -coverpkg=./... -coverprofile=coverage.out ./...
 	
 
@@ -276,7 +290,7 @@ migrateup:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 11):
+#  commands to execute (from `Makefile', line 14):
 	migrate -path db/migration -database "postgresql://root:quipper123@localhost:5432/notesnotes?sslmode=disable" -verbose up
 	
 
@@ -285,12 +299,12 @@ migratedown:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  commands to execute (from `Makefile', line 14):
+#  commands to execute (from `Makefile', line 17):
 	migrate -path db/migration -database "postgresql://root:quipper123@localhost:5432/notesnotes?sslmode=disable" -verbose down
 	
 
 # files hash-table stats:
-# Load=12/1024=1%, Rehash=0, Collisions=0/31=0%
+# Load=13/1024=1%, Rehash=0, Collisions=0/33=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -302,8 +316,7 @@ migratedown:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Jun  3 08:41:41 2022
+ 
+# Finished Make data base on Fri Jun  3 15:56:50 2022
 
  
-make: *** No rule to make target `all'.  Stop.
-
