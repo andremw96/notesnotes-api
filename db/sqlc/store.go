@@ -71,12 +71,20 @@ func (store *Store) InsertNewNote(ctx context.Context, arg InsertNoteTxParams) (
 			Title:       arg.Title,
 			Description: sql.NullString{String: arg.Description, Valid: true},
 		})
-
 		if err != nil {
 			return err
 		}
 
-		// TODO: UPDATE USER COUNT NOTES
+		// get account -> update count
+		user, err := q.GetUserForUpdate(ctx, arg.UserID)
+		if err != nil {
+			return err
+		}
+
+		result.User, err = q.UpdateUserNotesCountPlusOne(ctx, user.ID)
+		if err != nil {
+			return err
+		}
 
 		return nil
 	})

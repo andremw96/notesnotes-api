@@ -2,6 +2,7 @@ package db
 
 import (
 	db "andre/notesnotes-api/db/sqlc"
+	"fmt"
 
 	"andre/notesnotes-api/util"
 	"context"
@@ -14,6 +15,7 @@ func TestInsertNewNote(t *testing.T) {
 	store := db.NewStore(testDb)
 
 	user := createRandomUser(t)
+	fmt.Println(">> before: ", user.NotesCount)
 
 	// run n concurrent transfer transactions make sure transaction goes well
 	n := 5
@@ -62,6 +64,20 @@ func TestInsertNewNote(t *testing.T) {
 		_, err = store.GetNote(context.Background(), insertedNote.ID)
 		require.NoError(t, err)
 
+		// check user
+		creatorNote := result.User
+		require.NotEmpty(t, creatorNote)
+		require.Equal(t, creatorNote.ID, user.ID)
+
+		fmt.Println(">> tx: ", creatorNote.NotesCount)
 		// check user notes count
+		require.Equal(t, int32(i+1), creatorNote.NotesCount)
 	}
+
+	// check final counts
+	updatedUsers, err := store.GetUser(context.Background(), user.ID)
+	fmt.Println(">> after: ", updatedUsers.NotesCount)
+
+	require.NoError(t, err)
+	require.Equal(t, int32(n), updatedUsers.NotesCount)
 }

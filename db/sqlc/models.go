@@ -30,5 +30,5 @@ type User struct {
 	CreatedAt  time.Time      `json:"created_at"`
 	UpdatedAt  time.Time      `json:"updated_at"`
 	IsDeleted  bool           `json:"is_deleted"`
-	NotesCount sql.NullInt32  `json:"notes_count"`
+	NotesCount int32          `json:"notes_count"`
 }

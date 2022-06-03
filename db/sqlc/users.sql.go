@@ -103,6 +103,32 @@ func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
 	return i, err
 }
 
+const getUserForUpdate = `-- name: GetUserForUpdate :one
+SELECT id, full_name, first_name, last_name, username, email, password, created_at, updated_at, is_deleted, notes_count FROM users
+WHERE id = $1 AND is_deleted = FALSE 
+LIMIT 1
+FOR NO KEY UPDATE
+`
+
+func (q *Queries) GetUserForUpdate(ctx context.Context, id int32) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserForUpdate, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FullName,
+		&i.FirstName,
+		&i.LastName,
+		&i.Username,
+		&i.Email,
+		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.IsDeleted,
+		&i.NotesCount,
+	)
+	return i, err
+}
+
 const listUsers = `-- name: ListUsers :many
 SELECT id, full_name, first_name, last_name, username, email, password, created_at, updated_at, is_deleted, notes_count FROM users
 WHERE is_deleted = FALSE
@@ -176,6 +202,32 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		arg.Email,
 		arg.Password,
 	)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FullName,
+		&i.FirstName,
+		&i.LastName,
+		&i.Username,
+		&i.Email,
+		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.IsDeleted,
+		&i.NotesCount,
+	)
+	return i, err
+}
+
+const updateUserNotesCountPlusOne = `-- name: UpdateUserNotesCountPlusOne :one
+UPDATE users
+SET notes_count = notes_count + 1
+WHERE id = $1 AND is_deleted = FALSE
+RETURNING id, full_name, first_name, last_name, username, email, password, created_at, updated_at, is_deleted, notes_count
+`
+
+func (q *Queries) UpdateUserNotesCountPlusOne(ctx context.Context, id int32) (User, error) {
+	row := q.db.QueryRowContext(ctx, updateUserNotesCountPlusOne, id)
 	var i User
 	err := row.Scan(
 		&i.ID,
