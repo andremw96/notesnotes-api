@@ -7,6 +7,9 @@ createdb:
 dropdb:
 	docker exec -it postgres dropdb notesnotes
 
+createnewmigration:
+	migrate create -ext sql -dir db/migration -seq $(ARGS)
+
 migrateup:
 	migrate -path db/migration -database "postgresql://root:quipper123@localhost:5432/notesnotes?sslmode=disable" -verbose up
 
@@ -19,4 +22,4 @@ sqlc:
 unit_test_run:
 	go test -v -coverpkg=./... -coverprofile=coverage.out ./...
 
-.PHONY: postgres createdb dropdb migrateup migratedown sqlc unit_test_run
+.PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run 

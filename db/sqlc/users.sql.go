@@ -15,7 +15,7 @@ INSERT INTO users (
   full_name, first_name, last_name, username, email, password
 ) VALUES (
   $1, $2, $3, $4, $5, $6
-) RETURNING id, full_name, first_name, last_name, username, email, password, created_at
+) RETURNING id, full_name, first_name, last_name, username, email, password, created_at, updated_at, is_deleted, notes_count
 `
 
 type CreateUsersParams struct {
@@ -46,23 +46,42 @@ func (q *Queries) CreateUsers(ctx context.Context, arg CreateUsersParams) (User,
 		&i.Email,
 		&i.Password,
 		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.IsDeleted,
+		&i.NotesCount,
 	)
 	return i, err
 }
 
-const deleteUser = `-- name: DeleteUser :exec
-DELETE FROM users
-WHERE id = $1
+const deleteUser = `-- name: DeleteUser :one
+UPDATE users 
+SET is_deleted = TRUE, updated_at = now() 
+WHERE id = $1 
+RETURNING id, full_name, first_name, last_name, username, email, password, created_at, updated_at, is_deleted, notes_count
 `
 
-func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteUser, id)
-	return err
+func (q *Queries) DeleteUser(ctx context.Context, id int32) (User, error) {
+	row := q.db.QueryRowContext(ctx, deleteUser, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FullName,
+		&i.FirstName,
+		&i.LastName,
+		&i.Username,
+		&i.Email,
+		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.IsDeleted,
+		&i.NotesCount,
+	)
+	return i, err
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, full_name, first_name, last_name, username, email, password, created_at FROM users
-WHERE id = $1 LIMIT 1
+SELECT id, full_name, first_name, last_name, username, email, password, created_at, updated_at, is_deleted, notes_count FROM users
+WHERE id = $1 AND is_deleted = FALSE LIMIT 1
 `
 
 func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
@@ -77,12 +96,16 @@ func (q *Queries) GetUser(ctx context.Context, id int32) (User, error) {
 		&i.Email,
 		&i.Password,
 		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.IsDeleted,
+		&i.NotesCount,
 	)
 	return i, err
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, full_name, first_name, last_name, username, email, password, created_at FROM users
+SELECT id, full_name, first_name, last_name, username, email, password, created_at, updated_at, is_deleted, notes_count FROM users
+WHERE is_deleted = FALSE
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -111,6 +134,9 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 			&i.Email,
 			&i.Password,
 			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.IsDeleted,
+			&i.NotesCount,
 		); err != nil {
 			return nil, err
 		}
@@ -127,9 +153,9 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 
 const updateUser = `-- name: UpdateUser :one
 UPDATE users 
-SET first_name = $2, last_name = $3, full_name = $4, email = $5, password = $6
-WHERE id = $1 
-RETURNING id, full_name, first_name, last_name, username, email, password, created_at
+SET first_name = $2, last_name = $3, full_name = $4, email = $5, password = $6, updated_at = now()
+WHERE id = $1 AND is_deleted = FALSE
+RETURNING id, full_name, first_name, last_name, username, email, password, created_at, updated_at, is_deleted, notes_count
 `
 
 type UpdateUserParams struct {
@@ -160,6 +186,9 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		&i.Email,
 		&i.Password,
 		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.IsDeleted,
+		&i.NotesCount,
 	)
 	return i, err
 }

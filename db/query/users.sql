@@ -7,20 +7,23 @@ INSERT INTO users (
 
 -- name: GetUser :one
 SELECT * FROM users
-WHERE id = $1 LIMIT 1;
+WHERE id = $1 AND is_deleted = FALSE LIMIT 1;
 
 -- name: ListUsers :many
 SELECT * FROM users
+WHERE is_deleted = FALSE
 ORDER BY id
 LIMIT $1
 OFFSET $2;
 
 -- name: UpdateUser :one
 UPDATE users 
-SET first_name = $2, last_name = $3, full_name = $4, email = $5, password = $6
-WHERE id = $1 
+SET first_name = $2, last_name = $3, full_name = $4, email = $5, password = $6, updated_at = now()
+WHERE id = $1 AND is_deleted = FALSE
 RETURNING *;
 
--- name: DeleteUser :exec
-DELETE FROM users
-WHERE id = $1;
+-- name: DeleteUser :one
+UPDATE users 
+SET is_deleted = TRUE, updated_at = now() 
+WHERE id = $1 
+RETURNING *;

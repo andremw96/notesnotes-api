@@ -6,7 +6,9 @@ CREATE TABLE "users" (
   "username" varchar NOT NULL,
   "email" varchar NOT NULL,
   "password" varchar NOT NULL,
-  "created_at" TIMESTAMP DEFAULT (now()) NOT NULL
+  "created_at" TIMESTAMP DEFAULT (now()) NOT NULL,
+  "updated_at" TIMESTAMP DEFAULT (now()) NOT NULL,
+  "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE "notes" (
@@ -15,6 +17,8 @@ CREATE TABLE "notes" (
   "title" varchar NOT NULL,
   "description" varchar,
   "created_at" TIMESTAMP DEFAULT (now()) NOT NULL,
+  "updated_at" TIMESTAMP DEFAULT (now()) NOT NULL,
+  "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL,
   PRIMARY KEY ("id", "user_id")
 );
 

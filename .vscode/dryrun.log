@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/quipperindonesia/Desktop/Learning/golang/notesnotes-api'
+docker run --name postgres -p 5432:5432  -e POSTGRES_USER=root -e POSTGRES_PASSWORD=quipper123 -d postgres
+make: Leaving directory `/Users/quipperindonesia/Desktop/Learning/golang/notesnotes-api'
+ 

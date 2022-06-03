@@ -60,6 +60,7 @@ func TestGetNewtUser(t *testing.T) {
 	require.Equal(t, newUser.Email, user.Email)
 	require.Equal(t, newUser.Password, user.Password)
 	require.WithinDuration(t, newUser.CreatedAt, user.CreatedAt, time.Second)
+	require.WithinDuration(t, newUser.UpdatedAt, user.UpdatedAt, time.Second)
 }
 
 func TestUpdateUser(t *testing.T) {
@@ -89,18 +90,19 @@ func TestUpdateUser(t *testing.T) {
 	require.Equal(t, arg.Email, updatedNewUser.Email)
 	require.Equal(t, arg.Password, updatedNewUser.Password)
 	require.WithinDuration(t, newUser.CreatedAt, updatedNewUser.CreatedAt, time.Second)
+	require.WithinDuration(t, newUser.UpdatedAt, updatedNewUser.UpdatedAt, time.Second)
 }
 
 func TestDeleteUser(t *testing.T) {
 	newUser := createRandomUser(t)
 
-	err := testQueries.DeleteUser(context.Background(), newUser.ID)
+	deletedUser, err := testQueries.DeleteUser(context.Background(), newUser.ID)
 	require.NoError(t, err)
+	require.NotEmpty(t, deletedUser)
 
-	getDeletedUser, err := testQueries.GetUser(context.Background(), newUser.ID)
-	require.Error(t, err)
-	require.EqualError(t, err, sql.ErrNoRows.Error())
-	require.Empty(t, getDeletedUser)
+	require.Equal(t, deletedUser.ID, newUser.ID)
+	require.Equal(t, true, deletedUser.IsDeleted)
+	require.WithinDuration(t, newUser.UpdatedAt, deletedUser.UpdatedAt, time.Second)
 }
 
 func TestListUsers(t *testing.T) {

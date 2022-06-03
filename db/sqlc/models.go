@@ -15,15 +15,20 @@ type Note struct {
 	Title       string         `json:"title"`
 	Description sql.NullString `json:"description"`
 	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	IsDeleted   bool           `json:"is_deleted"`
 }
 
 type User struct {
-	ID        int32          `json:"id"`
-	FullName  string         `json:"full_name"`
-	FirstName string         `json:"first_name"`
-	LastName  sql.NullString `json:"last_name"`
-	Username  string         `json:"username"`
-	Email     string         `json:"email"`
-	Password  string         `json:"password"`
-	CreatedAt time.Time      `json:"created_at"`
+	ID         int32          `json:"id"`
+	FullName   string         `json:"full_name"`
+	FirstName  string         `json:"first_name"`
+	LastName   sql.NullString `json:"last_name"`
+	Username   string         `json:"username"`
+	Email      string         `json:"email"`
+	Password   string         `json:"password"`
+	CreatedAt  time.Time      `json:"created_at"`
+	UpdatedAt  time.Time      `json:"updated_at"`
+	IsDeleted  bool           `json:"is_deleted"`
+	NotesCount sql.NullInt32  `json:"notes_count"`
 }
