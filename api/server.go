@@ -19,6 +19,8 @@ func NewServer(store *db.Store) *Server {
 
 	// add routes
 	router.POST("/user", server.createUser)
+	router.GET("/user/:id", server.getUser) // id is URI parameter
+	router.GET("users", server.listUser)
 
 	server.router = router
 	return server
