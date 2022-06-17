@@ -2,6 +2,7 @@ package db
 
 import (
 	db "andre/notesnotes-api/db/sqlc"
+	"andre/notesnotes-api/util"
 	"database/sql"
 	"log"
 	"os"
@@ -19,9 +20,13 @@ var testQueries *db.Queries
 var testDb *sql.DB
 
 func TestMain(m *testing.M) {
-	var err error
+	config, err := util.LoadConfig("../../..")
+	if err != nil {
+		log.Fatal("cannot load config")
+	}
+
 	// ENTRY POINT FOR ALL UNIT TEST
-	testDb, err = sql.Open(dbDriver, dbSource)
+	testDb, err = sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to database")
 	}
