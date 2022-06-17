@@ -2,8 +2,10 @@ package api
 
 import (
 	db "andre/notesnotes-api/db/sqlc"
+	"andre/notesnotes-api/util"
 	"database/sql"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,9 +13,20 @@ import (
 type createUserRequest struct {
 	FirstName string `json:"first_name" binding:"required"`
 	LastName  string `json:"last_name"`
-	Username  string `json:"username" binding:"required"`
+	Username  string `json:"username" binding:"required,alphanum"`
 	Email     string `json:"email" binding:"required,email"`
-	Password  string `json:"password" binding:"required"`
+	Password  string `json:"password" binding:"required,min=6"`
+}
+
+type createUserResponse struct {
+	FullName   string         `json:"full_name"`
+	FirstName  string         `json:"first_name"`
+	LastName   sql.NullString `json:"last_name"`
+	Username   string         `json:"username"`
+	Email      string         `json:"email"`
+	CreatedAt  time.Time      `json:"created_at"`
+	UpdatedAt  time.Time      `json:"updated_at"`
+	NotesCount int32          `json:"notes_count"`
 }
 
 func (server *Server) createUser(ctx *gin.Context) {
@@ -23,13 +36,19 @@ func (server *Server) createUser(ctx *gin.Context) {
 		return
 	}
 
+	hashedPassword, err := util.HashPassword(req.Password)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
 	arg := db.CreateUsersParams{
 		FullName:  req.FirstName + " " + req.LastName,
 		FirstName: req.FirstName,
 		LastName:  sql.NullString{String: req.LastName, Valid: true},
 		Username:  req.Username,
 		Email:     req.Email,
-		Password:  req.Password,
+		Password:  hashedPassword,
 	}
 
 	user, err := server.store.CreateUsers(ctx, arg)
@@ -38,7 +57,18 @@ func (server *Server) createUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	response := createUserResponse{
+		FullName:   user.FullName,
+		FirstName:  user.FirstName,
+		LastName:   user.LastName,
+		Username:   user.Username,
+		Email:      user.Email,
+		CreatedAt:  user.CreatedAt,
+		UpdatedAt:  user.UpdatedAt,
+		NotesCount: user.NotesCount,
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }
 
 type getUserRequest struct {
@@ -62,7 +92,18 @@ func (server *Server) getUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	response := createUserResponse{
+		FullName:   user.FullName,
+		FirstName:  user.FirstName,
+		LastName:   user.LastName,
+		Username:   user.Username,
+		Email:      user.Email,
+		CreatedAt:  user.CreatedAt,
+		UpdatedAt:  user.UpdatedAt,
+		NotesCount: user.NotesCount,
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }
 
 type listUserRequest struct {
@@ -89,5 +130,20 @@ func (server *Server) listUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, users)
+	responses := []createUserResponse{}
+	for _, user := range users {
+		response := createUserResponse{
+			FullName:   user.FullName,
+			FirstName:  user.FirstName,
+			LastName:   user.LastName,
+			Username:   user.Username,
+			Email:      user.Email,
+			CreatedAt:  user.CreatedAt,
+			UpdatedAt:  user.UpdatedAt,
+			NotesCount: user.NotesCount,
+		}
+		responses = append(responses, response)
+	}
+
+	ctx.JSON(http.StatusOK, responses)
 }

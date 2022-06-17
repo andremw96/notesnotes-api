@@ -1,5 +1,5 @@
 CREATE TABLE "users" (
-  "id" SERIAL PRIMARY KEY,
+  "id" SERIAL,
   "full_name" varchar NOT NULL,
   "first_name" varchar NOT NULL,
   "last_name" varchar,
@@ -8,7 +8,8 @@ CREATE TABLE "users" (
   "password" varchar NOT NULL,
   "created_at" TIMESTAMP DEFAULT (now()) NOT NULL,
   "updated_at" TIMESTAMP DEFAULT (now()) NOT NULL,
-  "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL
+  "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL,
+  PRIMARY KEY ("id", "username")
 );
 
 CREATE TABLE "notes" (
@@ -24,4 +25,8 @@ CREATE TABLE "notes" (
 
 CREATE UNIQUE INDEX ON "notes" ("id");
 
+CREATE UNIQUE INDEX ON "users" ("id");
+
 ALTER TABLE "notes" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "users" ADD CONSTRAINT unique_username UNIQUE (username);

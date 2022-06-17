@@ -12,6 +12,9 @@ import (
 )
 
 func createRandomUser(t *testing.T) db.User {
+	hashedPassword, err := util.HashPassword(util.RandomString(6))
+	require.NoError(t, err)
+
 	firstName := util.RandomString(10)
 	lastName := sql.NullString{String: util.RandomString(10), Valid: true}
 	fullName := firstName + " " + lastName.String
@@ -21,7 +24,7 @@ func createRandomUser(t *testing.T) db.User {
 		FirstName: firstName,
 		Username:  util.RandomString(10),
 		Email:     util.RandomString(20),
-		Password:  util.RandomString(6),
+		Password:  hashedPassword,
 	}
 
 	user, err := testQueries.CreateUsers(context.Background(), arg)
