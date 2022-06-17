@@ -22,4 +22,7 @@ sqlc:
 unit_test_run:
 	go test -v -coverpkg=./... -coverprofile=coverage.out ./...
 
-.PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run 
+startserver:
+	go run main.go
+
+.PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run startserver
