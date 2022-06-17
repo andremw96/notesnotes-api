@@ -6,8 +6,14 @@ import (
 	"fmt"
 )
 
-// Store -> to provides all functions to execute db queries and transactions
-type Store struct {
+// Store provides all functions to execute db queries and transactions
+type Store interface {
+	Querier
+	InsertNewNote(ctx context.Context, arg InsertNoteTxParams) (InsertNoteTxResult, error)
+}
+
+// SQLStore -> to provides all functions to execute SQL queries and transactions
+type SQLStore struct {
 	// embedding Queries struct into Store, this is called COMPOSITION
 	// prefrered way to extend struct in golang instead inheritance
 	// by embedding Queries inside Store all individual query by Queries will be available for Store also
@@ -16,8 +22,8 @@ type Store struct {
 }
 
 // create new Store
-func NewStore(db *sql.DB) *Store {
-	return &Store{
+func NewStore(db *sql.DB) Store {
+	return &SQLStore{
 		db:      db,
 		Queries: New(db),
 	}
@@ -30,7 +36,7 @@ func NewStore(db *sql.DB) *Store {
 // and call callback function with the created Queries
 // finally commit or rollback transaction
 // executes a function within a database transaction
-func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
+func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -59,7 +65,7 @@ type InsertNoteTxResult struct {
 	User User `json:"user"`
 }
 
-func (store *Store) InsertNewNote(ctx context.Context, arg InsertNoteTxParams) (InsertNoteTxResult, error) {
+func (store *SQLStore) InsertNewNote(ctx context.Context, arg InsertNoteTxParams) (InsertNoteTxResult, error) {
 	var result InsertNoteTxResult
 
 	// create and run db transaction

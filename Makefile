@@ -25,4 +25,7 @@ unit_test_run:
 startserver:
 	go run main.go
 
-.PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run startserver
+generatemock:
+	mockgen -package mockdb -destination db/mock/store.go andre/notesnotes-api/db/sqlc Store
+
+.PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run startserver generatemock
