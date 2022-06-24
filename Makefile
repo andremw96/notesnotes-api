@@ -35,7 +35,7 @@ rundockerimagedebug:
 	docker run --name notesnotes-api -p 8080:8080 notesnotes-api:latest
 
 rundockerimagerelease:
-	docker run --name notesnotes-api --network notesnotes-network -p 8080:8080 -e DB_SOURCE=postgresql://root:quipper123@postgres:5432/notesnotes?sslmode=disable -e GIN_MODE=release notesnotes-api:latest
+	docker run --name notesnotes-api --network notesnotes-network -p 8080:8080 -e GIN_MODE=release notesnotes-api:latest
 
 removedockercontainer:
 	docker rm notesnotes-api
