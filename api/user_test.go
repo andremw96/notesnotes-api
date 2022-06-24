@@ -228,16 +228,7 @@ func requireBodyReponseMatchUser(t *testing.T, body *bytes.Buffer, user db.User)
 	err = json.Unmarshal(data, &gotUser)
 	require.NoError(t, err)
 
-	response := createUserResponse{
-		FullName:   user.FullName,
-		FirstName:  user.FirstName,
-		LastName:   user.LastName,
-		Username:   user.Username,
-		Email:      user.Email,
-		CreatedAt:  user.CreatedAt,
-		UpdatedAt:  user.UpdatedAt,
-		NotesCount: user.NotesCount,
-	}
+	response := newUserResponse(user)
 
 	require.Equal(t, user.FullName, response.FullName)
 	require.Equal(t, user.FirstName, response.FirstName)
