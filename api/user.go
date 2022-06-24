@@ -20,7 +20,7 @@ type createUserRequest struct {
 	Password  string `json:"password" binding:"required,min=6"`
 }
 
-type UserResponse struct {
+type userResponse struct {
 	FullName   string         `json:"full_name"`
 	FirstName  string         `json:"first_name"`
 	LastName   sql.NullString `json:"last_name"`
@@ -31,8 +31,8 @@ type UserResponse struct {
 	NotesCount int32          `json:"notes_count"`
 }
 
-func newUserResponse(user db.User) UserResponse {
-	return UserResponse{
+func newUserResponse(user db.User) userResponse {
+	return userResponse{
 		FullName:   user.FullName,
 		FirstName:  user.FirstName,
 		LastName:   user.LastName,
@@ -142,7 +142,7 @@ func (server *Server) listUser(ctx *gin.Context) {
 		return
 	}
 
-	responses := []UserResponse{}
+	responses := []userResponse{}
 	for _, user := range users {
 		response := newUserResponse(user)
 		responses = append(responses, response)
@@ -158,7 +158,7 @@ type loginUserRequest struct {
 
 type loginUserResponse struct {
 	AccessToken string       `json:"access_token"`
-	User        UserResponse `json:"user"`
+	User        userResponse `json:"user"`
 }
 
 func (server *Server) loginUser(ctx *gin.Context) {
