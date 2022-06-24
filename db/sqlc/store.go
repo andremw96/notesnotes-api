@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 )
 
 // Store provides all functions to execute db queries and transactions
@@ -60,9 +61,33 @@ type InsertNoteTxParams struct {
 	Description string `json:"description"`
 }
 
+type userResponse struct {
+	FullName   string         `json:"full_name"`
+	FirstName  string         `json:"first_name"`
+	LastName   sql.NullString `json:"last_name"`
+	Username   string         `json:"username"`
+	Email      string         `json:"email"`
+	CreatedAt  time.Time      `json:"created_at"`
+	UpdatedAt  time.Time      `json:"updated_at"`
+	NotesCount int32          `json:"notes_count"`
+}
+
+func newUserResponse(user User) userResponse {
+	return userResponse{
+		FullName:   user.FullName,
+		FirstName:  user.FirstName,
+		LastName:   user.LastName,
+		Username:   user.Username,
+		Email:      user.Email,
+		CreatedAt:  user.CreatedAt,
+		UpdatedAt:  user.UpdatedAt,
+		NotesCount: user.NotesCount,
+	}
+}
+
 type InsertNoteTxResult struct {
-	Note Note `json:"note"`
-	User User `json:"user"`
+	Note Note         `json:"note"`
+	User userResponse `json:"user"`
 }
 
 func (store *SQLStore) InsertNewNote(ctx context.Context, arg InsertNoteTxParams) (InsertNoteTxResult, error) {
@@ -87,10 +112,12 @@ func (store *SQLStore) InsertNewNote(ctx context.Context, arg InsertNoteTxParams
 			return err
 		}
 
-		result.User, err = q.UpdateUserNotesCountPlusOne(ctx, user.ID)
+		resultUser, err := q.UpdateUserNotesCountPlusOne(ctx, user.ID)
 		if err != nil {
 			return err
 		}
+
+		result.User = newUserResponse(resultUser)
 
 		return nil
 	})

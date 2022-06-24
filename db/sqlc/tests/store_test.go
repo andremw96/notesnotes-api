@@ -67,7 +67,7 @@ func TestInsertNewNote(t *testing.T) {
 		// check user
 		creatorNote := result.User
 		require.NotEmpty(t, creatorNote)
-		require.Equal(t, creatorNote.ID, user.ID)
+		require.Equal(t, creatorNote.Username, user.Username)
 
 		fmt.Println(">> tx: ", creatorNote.NotesCount)
 		// check user notes count

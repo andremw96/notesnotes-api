@@ -2,8 +2,10 @@ package api
 
 import (
 	db "andre/notesnotes-api/db/sqlc"
+	"andre/notesnotes-api/token"
 	"andre/notesnotes-api/util"
 	"database/sql"
+	"errors"
 	"net/http"
 	"time"
 
@@ -18,7 +20,7 @@ type createUserRequest struct {
 	Password  string `json:"password" binding:"required,min=6"`
 }
 
-type userResponse struct {
+type UserResponse struct {
 	FullName   string         `json:"full_name"`
 	FirstName  string         `json:"first_name"`
 	LastName   sql.NullString `json:"last_name"`
@@ -29,8 +31,8 @@ type userResponse struct {
 	NotesCount int32          `json:"notes_count"`
 }
 
-func newUserResponse(user db.User) userResponse {
-	return userResponse{
+func newUserResponse(user db.User) UserResponse {
+	return UserResponse{
 		FullName:   user.FullName,
 		FirstName:  user.FirstName,
 		LastName:   user.LastName,
@@ -96,6 +98,13 @@ func (server *Server) getUser(ctx *gin.Context) {
 		return
 	}
 
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	if user.Username != authPayload.Username {
+		err := errors.New("user doesn't belong to the authenticated user")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
 	response := newUserResponse(user)
 
 	ctx.JSON(http.StatusOK, response)
@@ -125,7 +134,15 @@ func (server *Server) listUser(ctx *gin.Context) {
 		return
 	}
 
-	responses := []userResponse{}
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	err = authPayload.Valid()
+	if err != nil {
+		err := errors.New("you are not authenticated")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
+
+	responses := []UserResponse{}
 	for _, user := range users {
 		response := newUserResponse(user)
 		responses = append(responses, response)
@@ -141,7 +158,7 @@ type loginUserRequest struct {
 
 type loginUserResponse struct {
 	AccessToken string       `json:"access_token"`
-	User        userResponse `json:"user"`
+	User        UserResponse `json:"user"`
 }
 
 func (server *Server) loginUser(ctx *gin.Context) {

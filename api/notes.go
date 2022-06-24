@@ -2,7 +2,9 @@ package api
 
 import (
 	db "andre/notesnotes-api/db/sqlc"
+	"andre/notesnotes-api/token"
 	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +23,15 @@ func (server *Server) insertNewNote(ctx *gin.Context) {
 		return
 	}
 
-	if !server.validUser(ctx, req.UserID) {
+	loggedInUser, valid := server.validUser(ctx, req.UserID)
+	if !valid {
+		return
+	}
+
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	if loggedInUser.Username != authPayload.Username {
+		err := errors.New("Logged in user is different with authorization bearer")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 
@@ -40,16 +50,16 @@ func (server *Server) insertNewNote(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, result)
 }
 
-func (server *Server) validUser(ctx *gin.Context, userID int32) bool {
-	_, err := server.store.GetUser(ctx, userID)
+func (server *Server) validUser(ctx *gin.Context, userID int32) (*db.User, bool) {
+	user, err := server.store.GetUser(ctx, userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
-			return false
+			return nil, false
 		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return false
+		return nil, false
 	}
 
-	return true
+	return &user, true
 }
