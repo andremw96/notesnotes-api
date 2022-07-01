@@ -6,8 +6,11 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
+make: *** No rule to make target `all'.  Stop.
 
-# Make data base, printed on Fri Jun 24 07:35:49 2022
+
+# Make data base, printed on Fri Jul  1 09:43:53 2022
 
 # Variables
 
@@ -42,7 +45,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-a794f43e-840d-47da-ae0f-6e0e929d3ada.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-edb90058-2d82-46a1-a69a-e7b70eef43a9.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -166,7 +169,7 @@ MAKELEVEL := 0
 # environment
 CONDA_PREFIX = /Users/quipperindonesia/opt/anaconda3
 # environment
-VSCODE_PID = 43367
+VSCODE_PID = 34785
 # environment
 _CE_CONDA = 
 # environment
@@ -180,9 +183,9 @@ LANG = C
 
 # Directories
 
-# . (device 16777225, inode 51074997): 17 files, no impossibilities.
+# . (device 16777225, inode 51074997): 19 files, no impossibilities.
 
-# 17 files, no impossibilities in 1 directories.
+# 19 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -196,7 +199,7 @@ postgres:
 #  File does not exist.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 2):
-	docker run --name postgres -p 5432:5432  -e POSTGRES_USER=root -e POSTGRES_PASSWORD=quipper123 -d postgres
+	docker run --name postgres --network notesnotes-network -p 5432:5432  -e POSTGRES_USER=root -e POSTGRES_PASSWORD=quipper123 -d postgres
 	
 
 # Not a target:
@@ -208,7 +211,16 @@ all:
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
 
-.PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run startserver generatemock
+createdockerimage:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 32):
+	docker build -t notesnotes-api:latest .
+	
+
+.PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run startserver generatemock createdockerimage rundockerimagedebug rundockerimagerelease removedockercontainer
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -240,11 +252,20 @@ createnewmigration:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-17 11:59:55
+#  Last modified 2022-06-24 16:47:54
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
 # Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+rundockerimagedebug:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 35):
+	docker run --name notesnotes-api -p 8080:8080 notesnotes-api:latest
+	
 
 createdb:
 #  Phony target (prerequisite of .PHONY).
@@ -282,11 +303,30 @@ startserver:
 	go run main.go
 	
 
+rundockerimagerelease:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 38):
+ 
+	docker run --name notesnotes-api --network notesnotes-network -p 8080:8080 -e GIN_MODE=release notesnotes-api:latest
+	
+
 # Not a target:
 .DEFAULT:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+
+removedockercontainer:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  commands to execute (from `Makefile', line 41):
+	docker rm notesnotes-api
+	
 
 dropdb:
 #  Phony target (prerequisite of .PHONY).
@@ -303,9 +343,6 @@ migrateup:
 #  File does not exist.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 14):
- 
-make: *** No rule to make target `all'.  Stop.
-
 	migrate -path db/migration -database "postgresql://root:quipper123@localhost:5432/notesnotes?sslmode=disable" -verbose up
 	
 
@@ -319,7 +356,7 @@ migratedown:
 	
 
 # files hash-table stats:
-# Load=15/1024=1%, Rehash=0, Collisions=0/37=0%
+# Load=19/1024=2%, Rehash=0, Collisions=0/45=0%
 # VPATH Search Paths
 
 # No `vpath' search paths.
@@ -331,6 +368,6 @@ migratedown:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Jun 24 07:35:50 2022
+# Finished Make data base on Fri Jul  1 09:43:53 2022
 
  
