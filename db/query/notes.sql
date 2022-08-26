@@ -16,6 +16,13 @@ ORDER BY id
 LIMIT $1
 OFFSET $2;
 
+-- name: ListNotesByUserId :many
+SELECT * FROM notes
+WHERE is_deleted = FALSE AND user_id = $3
+ORDER BY id
+LIMIT $1
+OFFSET $2;
+
 -- name: UpdateNote :one
 UPDATE notes
 SET title = $2, description = $3, updated_at = now()

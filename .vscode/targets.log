@@ -7,14 +7,11 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
  
-make: *** No rule to make target `all'.  Stop.
 
-
-# Make data base, printed on Fri Aug 26 11:54:43 2022
+# Make data base, printed on Fri Aug 26 14:04:54 2022
 
 # Variables
 
- 
 # environment
 JENV_SHELL = zsh
 # automatic
@@ -46,7 +43,7 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-254659e4-9508-46ff-b167-629c0246b599.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-ed46b9b8-7ad6-48e4-9306-7ebaac2da405.sock
 # environment
 VSCODE_CWD = /
 # environment
@@ -88,7 +85,7 @@ VSCODE_CODE_CACHE_PATH = /Users/quipperindonesia/Library/Application Support/Cod
 # environment
 LOGNAME = quipperindonesia
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 CONDA_PROMPT_MODIFIER = (base) 
 # environment
@@ -138,7 +135,6 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
- 
 XPC_SERVICE_NAME = application.com.microsoft.VSCode.51096888.51096894
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
@@ -222,7 +218,6 @@ createdockerimage:
 	docker build -t notesnotes-api:latest .
 	
 
- 
 .PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run startserver generatemock createdockerimage rundockerimagedebug rundockerimagerelease removedockercontainer
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -311,6 +306,9 @@ rundockerimagerelease:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
+ 
+make: *** No rule to make target `all'.  Stop.
+
 #  commands to execute (from `Makefile', line 38):
 	docker run --name notesnotes-api --network notesnotes-network -p 8080:8080 -e GIN_MODE=release notesnotes-api:latest
 	
@@ -370,6 +368,6 @@ migratedown:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Aug 26 11:54:43 2022
+# Finished Make data base on Fri Aug 26 14:04:54 2022
 
  

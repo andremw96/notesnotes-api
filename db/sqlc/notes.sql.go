@@ -125,6 +125,51 @@ func (q *Queries) ListNotes(ctx context.Context, arg ListNotesParams) ([]Note, e
 	return items, nil
 }
 
+const listNotesByUserId = `-- name: ListNotesByUserId :many
+SELECT id, user_id, title, description, created_at, updated_at, is_deleted FROM notes
+WHERE is_deleted = FALSE AND user_id = $3
+ORDER BY id
+LIMIT $1
+OFFSET $2
+`
+
+type ListNotesByUserIdParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+	UserID int32 `json:"user_id"`
+}
+
+func (q *Queries) ListNotesByUserId(ctx context.Context, arg ListNotesByUserIdParams) ([]Note, error) {
+	rows, err := q.db.QueryContext(ctx, listNotesByUserId, arg.Limit, arg.Offset, arg.UserID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Note{}
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Title,
+			&i.Description,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.IsDeleted,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateNote = `-- name: UpdateNote :one
 UPDATE notes
 SET title = $2, description = $3, updated_at = now()

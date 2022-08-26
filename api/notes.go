@@ -2,9 +2,7 @@ package api
 
 import (
 	db "andre/notesnotes-api/db/sqlc"
-	"andre/notesnotes-api/token"
 	"database/sql"
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,17 +21,17 @@ func (server *Server) insertNewNote(ctx *gin.Context) {
 		return
 	}
 
-	loggedInUser, valid := server.validUser(ctx, req.UserID)
-	if !valid {
-		return
-	}
+	// loggedInUser, valid := server.validUser(ctx, req.UserID)
+	// if !valid {
+	// 	return
+	// }
 
-	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	if loggedInUser.Username != authPayload.Username {
-		err := errors.New("Logged in user is different with authorization bearer")
-		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
-		return
-	}
+	// authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	// if loggedInUser.Username != authPayload.Username {
+	// 	err := errors.New("Logged in user is different with authorization bearer")
+	// 	ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+	// 	return
+	// }
 
 	arg := db.InsertNoteTxParams{
 		UserID:      req.UserID,
@@ -42,6 +40,44 @@ func (server *Server) insertNewNote(ctx *gin.Context) {
 	}
 
 	result, err := server.store.InsertNewNote(ctx, arg)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, result)
+}
+
+type getNoteListByUserIDRequest struct {
+	UserID int32 `json:"user_id" binding:"required"`
+}
+
+func (server *Server) getNoteListByUserId(ctx *gin.Context) {
+	var req getNoteListByUserIDRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	// loggedInUser, valid := server.validUser(ctx, req.UserID)
+	// if !valid {
+	// 	return
+	// }
+
+	// authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	// if loggedInUser.Username != authPayload.Username {
+	// 	err := errors.New("Logged in user is different with authorization bearer")
+	// 	ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+	// 	return
+	// }
+
+	arg := db.ListNotesByUserIdParams{
+		UserID: req.UserID,
+		Limit:  5,
+		Offset: 0,
+	}
+
+	result, err := server.store.ListNotesByUserId(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
