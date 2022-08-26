@@ -13,16 +13,14 @@ import (
 )
 
 type createUserRequest struct {
-	FirstName string `json:"first_name" binding:"required"`
-	LastName  string `json:"last_name"`
-	Username  string `json:"username" binding:"required,alphanum"`
-	Email     string `json:"email" binding:"required,email"`
-	Password  string `json:"password" binding:"required,min=6"`
+	Username string `json:"username" binding:"required,alphanum"`
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required,min=6"`
 }
 
 type userResponse struct {
-	FullName   string         `json:"full_name"`
-	FirstName  string         `json:"first_name"`
+	FullName   sql.NullString `json:"full_name"`
+	FirstName  sql.NullString `json:"first_name"`
 	LastName   sql.NullString `json:"last_name"`
 	Username   string         `json:"username"`
 	Email      string         `json:"email"`
@@ -58,12 +56,9 @@ func (server *Server) createUser(ctx *gin.Context) {
 	}
 
 	arg := db.CreateUsersParams{
-		FullName:  req.FirstName + " " + req.LastName,
-		FirstName: req.FirstName,
-		LastName:  sql.NullString{String: req.LastName, Valid: true},
-		Username:  req.Username,
-		Email:     req.Email,
-		Password:  hashedPassword,
+		Username: req.Username,
+		Email:    req.Email,
+		Password: hashedPassword,
 	}
 
 	user, err := server.store.CreateUsers(ctx, arg)

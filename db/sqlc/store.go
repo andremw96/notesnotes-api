@@ -62,8 +62,8 @@ type InsertNoteTxParams struct {
 }
 
 type userResponse struct {
-	FullName   string         `json:"full_name"`
-	FirstName  string         `json:"first_name"`
+	FullName   sql.NullString `json:"full_name"`
+	FirstName  sql.NullString `json:"first_name"`
 	LastName   sql.NullString `json:"last_name"`
 	Username   string         `json:"username"`
 	Email      string         `json:"email"`

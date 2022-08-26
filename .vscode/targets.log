@@ -10,7 +10,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Fri Jul  1 09:43:53 2022
+# Make data base, printed on Fri Aug 26 09:40:34 2022
 
 # Variables
 
@@ -38,24 +38,19 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 _ = /usr/bin/make
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
-# environment
-VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+ 
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-edb90058-2d82-46a1-a69a-e7b70eef43a9.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-25aa7cd3-6e00-46a0-a106-f6fdc8ee41d5.sock
 # environment
 VSCODE_CWD = /
 # environment
-GOPROXY = https://proxy.golang.org,direct
-# environment
-PATH = /Users/quipperindonesia/opt/anaconda3/bin:/Users/quipperindonesia/opt/anaconda3/condabin:/Users/quipperindonesia/.jenv/shims:/Users/quipperindonesia/.jenv/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/quipperindonesia/go/bin
+PATH = /Users/quipperindonesia/opt/anaconda3/bin:/Users/quipperindonesia/opt/anaconda3/condabin:/Users/quipperindonesia/.jenv/shims:/Users/quipperindonesia/.jenv/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/quipperindonesia/Desktop/Learning/flutter/flutter/bin:/Users/quipperindonesia/go/bin
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
-# environment
-GOPATH = /Users/quipperindonesia/go
 # environment
 VSCODE_LOG_STACK = false
 # environment
@@ -63,7 +58,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.blFBRmbWlx/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.bB9P426pxZ/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -75,11 +70,11 @@ PWD = /Users/quipperindonesia/Desktop/Learning/golang/notesnotes-api
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # environment
-GOMODCACHE = /Users/quipperindonesia/go/pkg/mod
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 HOME = /Users/quipperindonesia
 # default
-MAKEFILEPATH = $(shell /usr/bin/xcode-select -print-path 2>/dev/null || echo /Developer)/Makefiles
+MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
 GIT_PR_RELEASE_TOKEN = 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
 # environment
@@ -121,7 +116,7 @@ LESS = -R
 # environment
 CONDA_SHLVL = 1
 # default
-MAKE_COMMAND := /Library/Developer/CommandLineTools/usr/bin/make
+MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
 # default
 .VARIABLES := 
 # environment
@@ -169,13 +164,14 @@ MAKELEVEL := 0
 # environment
 CONDA_PREFIX = /Users/quipperindonesia/opt/anaconda3
 # environment
-VSCODE_PID = 34785
+VSCODE_PID = 63339
 # environment
 _CE_CONDA = 
 # environment
 LANG = C
 # variable set hash-table stats:
-# Load=80/1024=8%, Rehash=0, Collisions=4/104=4%
+ 
+# Load=77/1024=8%, Rehash=0, Collisions=3/101=3%
 
 # Pattern-specific Variable Values
 
@@ -183,9 +179,9 @@ LANG = C
 
 # Directories
 
-# . (device 16777225, inode 51074997): 19 files, no impossibilities.
+# . (device 16777221, inode 51074997): 22 files, no impossibilities.
 
-# 19 files, no impossibilities in 1 directories.
+# 22 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -252,7 +248,7 @@ createnewmigration:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-06-24 16:47:54
+#  Last modified 2022-07-01 10:49:39
 #  File has been updated.
 #  Successfully updated.
 # variable set hash-table stats:
@@ -309,11 +305,11 @@ rundockerimagerelease:
 #  File does not exist.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 38):
- 
 	docker run --name notesnotes-api --network notesnotes-network -p 8080:8080 -e GIN_MODE=release notesnotes-api:latest
 	
 
 # Not a target:
+ 
 .DEFAULT:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -368,6 +364,6 @@ migratedown:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Jul  1 09:43:53 2022
+# Finished Make data base on Fri Aug 26 09:40:34 2022
 
  

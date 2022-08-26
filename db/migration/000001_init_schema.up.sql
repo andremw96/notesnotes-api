@@ -1,7 +1,7 @@
 CREATE TABLE "users" (
   "id" SERIAL,
-  "full_name" varchar NOT NULL,
-  "first_name" varchar NOT NULL,
+  "full_name" varchar,
+  "first_name" varchar,
   "last_name" varchar,
   "username" varchar NOT NULL,
   "email" varchar NOT NULL,

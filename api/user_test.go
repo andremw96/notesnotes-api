@@ -170,12 +170,9 @@ func TestCreateUserAPI(t *testing.T) {
 			},
 			buildStubs: func(store *mockdb.MockStore) {
 				arg := db.CreateUsersParams{
-					FullName:  user.FullName,
-					FirstName: user.FirstName,
-					LastName:  user.LastName,
-					Username:  user.Username,
-					Email:     user.Email,
-					Password:  user.Password,
+					Username: user.Username,
+					Email:    user.Email,
+					Password: user.Password,
 				}
 				store.EXPECT().
 					CreateUsers(gomock.Any(), EqCreateUserParam(arg, arg.Password)).
@@ -221,9 +218,9 @@ func randomUser(t *testing.T) db.User {
 	hashedPassword, err := util.HashPassword(util.RandomString(6))
 	require.NoError(t, err)
 
-	firstName := util.RandomString(10)
+	firstName := sql.NullString{String: util.RandomString(10), Valid: true}
 	lastName := sql.NullString{String: util.RandomString(10), Valid: true}
-	fullName := firstName + " " + lastName.String
+	fullName := sql.NullString{String: firstName.String + " " + lastName.String, Valid: true}
 
 	return db.User{
 		ID:        util.RandomInt(1, 1000),

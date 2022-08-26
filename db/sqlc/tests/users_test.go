@@ -15,25 +15,16 @@ func createRandomUser(t *testing.T) db.User {
 	hashedPassword, err := util.HashPassword(util.RandomString(6))
 	require.NoError(t, err)
 
-	firstName := util.RandomString(10)
-	lastName := sql.NullString{String: util.RandomString(10), Valid: true}
-	fullName := firstName + " " + lastName.String
 	arg := db.CreateUsersParams{
-		FullName:  fullName,
-		LastName:  lastName,
-		FirstName: firstName,
-		Username:  util.RandomString(10),
-		Email:     util.RandomString(20),
-		Password:  hashedPassword,
+		Username: util.RandomString(10),
+		Email:    util.RandomString(20),
+		Password: hashedPassword,
 	}
 
 	user, err := testQueries.CreateUsers(context.Background(), arg)
 	require.NoError(t, err) // check error must be null
 	require.NotEmpty(t, user)
 
-	require.Equal(t, arg.FullName, user.FullName)
-	require.Equal(t, arg.LastName, user.LastName)
-	require.Equal(t, arg.FirstName, user.FirstName)
 	require.Equal(t, arg.Username, user.Username)
 	require.Equal(t, arg.Email, user.Email)
 	require.Equal(t, arg.Password, user.Password)
@@ -69,9 +60,9 @@ func TestGetNewtUser(t *testing.T) {
 func TestUpdateUser(t *testing.T) {
 	newUser := createRandomUser(t)
 
-	updatedFirstName := util.RandomString(10)
+	updatedFirstName := sql.NullString{String: util.RandomString(10), Valid: true}
 	updatedLastName := sql.NullString{String: util.RandomString(10), Valid: true}
-	updatedFullName := updatedFirstName + " " + updatedLastName.String
+	updatedFullName := sql.NullString{String: updatedFirstName.String + " " + updatedLastName.String, Valid: true}
 	arg := db.UpdateUserParams{
 		ID:        newUser.ID,
 		FirstName: updatedFirstName,
