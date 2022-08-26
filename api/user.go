@@ -19,6 +19,7 @@ type createUserRequest struct {
 }
 
 type userResponse struct {
+	ID         int            `json:"user_id"`
 	FullName   sql.NullString `json:"full_name"`
 	FirstName  sql.NullString `json:"first_name"`
 	LastName   sql.NullString `json:"last_name"`
@@ -31,6 +32,7 @@ type userResponse struct {
 
 func newUserResponse(user db.User) userResponse {
 	return userResponse{
+		ID:         int(user.ID),
 		FullName:   user.FullName,
 		FirstName:  user.FirstName,
 		LastName:   user.LastName,

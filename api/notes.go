@@ -49,12 +49,12 @@ func (server *Server) insertNewNote(ctx *gin.Context) {
 }
 
 type getNoteListByUserIDRequest struct {
-	UserID int32 `json:"user_id" binding:"required"`
+	UserID int32 `form:"user_id" binding:"required"`
 }
 
 func (server *Server) getNoteListByUserId(ctx *gin.Context) {
 	var req getNoteListByUserIDRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
+	if err := ctx.ShouldBindQuery(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
