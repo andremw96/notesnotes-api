@@ -10,10 +10,11 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Fri Aug 26 09:40:34 2022
+# Make data base, printed on Fri Aug 26 11:54:43 2022
 
 # Variables
 
+ 
 # environment
 JENV_SHELL = zsh
 # automatic
@@ -38,19 +39,24 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 _ = /usr/bin/make
 # makefile (from `Makefile', line 1)
 MAKEFILE_LIST :=  Makefile
- 
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-25aa7cd3-6e00-46a0-a106-f6fdc8ee41d5.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-254659e4-9508-46ff-b167-629c0246b599.sock
 # environment
 VSCODE_CWD = /
+# environment
+GOPROXY = https://proxy.golang.org,direct
 # environment
 PATH = /Users/quipperindonesia/opt/anaconda3/bin:/Users/quipperindonesia/opt/anaconda3/condabin:/Users/quipperindonesia/.jenv/shims:/Users/quipperindonesia/.jenv/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/quipperindonesia/Desktop/Learning/flutter/flutter/bin:/Users/quipperindonesia/go/bin
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
+# environment
+GOPATH = /Users/quipperindonesia/go
 # environment
 VSCODE_LOG_STACK = false
 # environment
@@ -70,7 +76,7 @@ PWD = /Users/quipperindonesia/Desktop/Learning/golang/notesnotes-api
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = undefined
 # environment
-VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+GOMODCACHE = /Users/quipperindonesia/go/pkg/mod
 # environment
 HOME = /Users/quipperindonesia
 # default
@@ -82,7 +88,7 @@ VSCODE_CODE_CACHE_PATH = /Users/quipperindonesia/Library/Application Support/Cod
 # environment
 LOGNAME = quipperindonesia
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
 CONDA_PROMPT_MODIFIER = (base) 
 # environment
@@ -132,6 +138,7 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
+ 
 XPC_SERVICE_NAME = application.com.microsoft.VSCode.51096888.51096894
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
@@ -170,8 +177,7 @@ _CE_CONDA =
 # environment
 LANG = C
 # variable set hash-table stats:
- 
-# Load=77/1024=8%, Rehash=0, Collisions=3/101=3%
+# Load=80/1024=8%, Rehash=0, Collisions=4/104=4%
 
 # Pattern-specific Variable Values
 
@@ -216,6 +222,7 @@ createdockerimage:
 	docker build -t notesnotes-api:latest .
 	
 
+ 
 .PHONY: postgres createdb dropdb createnewmigration migrateup migratedown sqlc unit_test_run startserver generatemock createdockerimage rundockerimagedebug rundockerimagerelease removedockercontainer
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -309,7 +316,6 @@ rundockerimagerelease:
 	
 
 # Not a target:
- 
 .DEFAULT:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -364,6 +370,6 @@ migratedown:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Aug 26 09:40:34 2022
+# Finished Make data base on Fri Aug 26 11:54:43 2022
 
  

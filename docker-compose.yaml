@@ -5,6 +5,8 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=quipper123
       - POSTGRES_DB=notesnotes
+    ports:
+      - "5432:5432"
   api:
     build:
       context: .
