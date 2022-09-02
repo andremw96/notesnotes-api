@@ -25,12 +25,12 @@ OFFSET $2;
 
 -- name: UpdateNote :one
 UPDATE notes
-SET title = $2, description = $3, updated_at = now()
-WHERE id = $1 AND is_deleted = FALSE
+SET title = $3, description = $4, updated_at = now()
+WHERE id = $1 AND user_id = $2 AND is_deleted = FALSE
 RETURNING *;
 
 -- name: DeleteNote :one
 UPDATE notes
 SET is_deleted = TRUE, updated_at = now()
-WHERE id = $1
+WHERE id = $1 AND user_id = $2
 RETURNING *;

@@ -42,12 +42,17 @@ func (q *Queries) CreateNote(ctx context.Context, arg CreateNoteParams) (Note, e
 const deleteNote = `-- name: DeleteNote :one
 UPDATE notes
 SET is_deleted = TRUE, updated_at = now()
-WHERE id = $1
+WHERE id = $1 AND user_id = $2
 RETURNING id, user_id, title, description, created_at, updated_at, is_deleted
 `
 
-func (q *Queries) DeleteNote(ctx context.Context, id int32) (Note, error) {
-	row := q.db.QueryRowContext(ctx, deleteNote, id)
+type DeleteNoteParams struct {
+	ID     int32 `json:"id"`
+	UserID int32 `json:"user_id"`
+}
+
+func (q *Queries) DeleteNote(ctx context.Context, arg DeleteNoteParams) (Note, error) {
+	row := q.db.QueryRowContext(ctx, deleteNote, arg.ID, arg.UserID)
 	var i Note
 	err := row.Scan(
 		&i.ID,
@@ -172,19 +177,25 @@ func (q *Queries) ListNotesByUserId(ctx context.Context, arg ListNotesByUserIdPa
 
 const updateNote = `-- name: UpdateNote :one
 UPDATE notes
-SET title = $2, description = $3, updated_at = now()
-WHERE id = $1 AND is_deleted = FALSE
+SET title = $3, description = $4, updated_at = now()
+WHERE id = $1 AND user_id = $2 AND is_deleted = FALSE
 RETURNING id, user_id, title, description, created_at, updated_at, is_deleted
 `
 
 type UpdateNoteParams struct {
 	ID          int32          `json:"id"`
+	UserID      int32          `json:"user_id"`
 	Title       string         `json:"title"`
 	Description sql.NullString `json:"description"`
 }
 
 func (q *Queries) UpdateNote(ctx context.Context, arg UpdateNoteParams) (Note, error) {
-	row := q.db.QueryRowContext(ctx, updateNote, arg.ID, arg.Title, arg.Description)
+	row := q.db.QueryRowContext(ctx, updateNote,
+		arg.ID,
+		arg.UserID,
+		arg.Title,
+		arg.Description,
+	)
 	var i Note
 	err := row.Scan(
 		&i.ID,

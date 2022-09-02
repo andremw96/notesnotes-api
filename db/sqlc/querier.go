@@ -11,7 +11,7 @@ import (
 type Querier interface {
 	CreateNote(ctx context.Context, arg CreateNoteParams) (Note, error)
 	CreateUsers(ctx context.Context, arg CreateUsersParams) (User, error)
-	DeleteNote(ctx context.Context, id int32) (Note, error)
+	DeleteNote(ctx context.Context, arg DeleteNoteParams) (Note, error)
 	DeleteUser(ctx context.Context, id int32) (User, error)
 	GetNote(ctx context.Context, id int32) (Note, error)
 	GetUser(ctx context.Context, id int32) (User, error)

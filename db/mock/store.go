@@ -66,7 +66,7 @@ func (mr *MockStoreMockRecorder) CreateUsers(arg0, arg1 interface{}) *gomock.Cal
 }
 
 // DeleteNote mocks base method.
-func (m *MockStore) DeleteNote(arg0 context.Context, arg1 int32) (db.Note, error) {
+func (m *MockStore) DeleteNote(arg0 context.Context, arg1 db.DeleteNoteParams) (db.Note, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DeleteNote", arg0, arg1)
 	ret0, _ := ret[0].(db.Note)

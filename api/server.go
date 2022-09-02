@@ -49,6 +49,8 @@ func (server *Server) initializeRouter() {
 	router.GET("/user/:id", server.getUser) // id is URI parameter
 	router.GET("users", server.listUser)
 	router.POST("/insertnote", server.insertNewNote)
+	router.POST("/updatenote", server.updateNote)
+	router.DELETE("/deletenote", server.deleteNote)
 	router.GET("/notes", server.getNoteListByUserId)
 
 	server.router = router
