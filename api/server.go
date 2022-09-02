@@ -42,16 +42,13 @@ func (server *Server) initializeRouter() {
 	router.POST("/user", server.createUser)
 	router.POST("/user/login", server.loginUser)
 
-	// authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
-	// authRoutes.GET("/user/:id", server.getUser) // id is URI parameter
-	// authRoutes.GET("users", server.listUser)
-	// authRoutes.POST("/insertnote", server.insertNewNote)
-	router.GET("/user/:id", server.getUser) // id is URI parameter
-	router.GET("users", server.listUser)
-	router.POST("/insertnote", server.insertNewNote)
-	router.POST("/updatenote", server.updateNote)
-	router.DELETE("/deletenote", server.deleteNote)
-	router.GET("/notes", server.getNoteListByUserId)
+	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
+	authRoutes.GET("/user/:id", server.getUser) // id is URI parameter
+	authRoutes.GET("users", server.listUser)
+	authRoutes.POST("/insertnote", server.insertNewNote)
+	authRoutes.POST("/updatenote", server.updateNote)
+	authRoutes.DELETE("/deletenote", server.deleteNote)
+	authRoutes.GET("/notes", server.getNoteListByUserId)
 
 	server.router = router
 }

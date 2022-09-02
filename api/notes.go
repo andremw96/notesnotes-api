@@ -2,7 +2,9 @@ package api
 
 import (
 	db "andre/notesnotes-api/db/sqlc"
+	"andre/notesnotes-api/token"
 	"database/sql"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,17 +23,7 @@ func (server *Server) insertNewNote(ctx *gin.Context) {
 		return
 	}
 
-	// loggedInUser, valid := server.validUser(ctx, req.UserID)
-	// if !valid {
-	// 	return
-	// }
-
-	// authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	// if loggedInUser.Username != authPayload.Username {
-	// 	err := errors.New("Logged in user is different with authorization bearer")
-	// 	ctx.JSON(http.StatusUnauthorized, errorResponse(err))
-	// 	return
-	// }
+	server.isLoggedIn(ctx, req.UserID)
 
 	arg := db.InsertNoteTxParams{
 		UserID:      req.UserID,
@@ -62,17 +54,7 @@ func (server *Server) updateNote(ctx *gin.Context) {
 		return
 	}
 
-	// loggedInUser, valid := server.validUser(ctx, req.UserID)
-	// if !valid {
-	// 	return
-	// }
-
-	// authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	// if loggedInUser.Username != authPayload.Username {
-	// 	err := errors.New("Logged in user is different with authorization bearer")
-	// 	ctx.JSON(http.StatusUnauthorized, errorResponse(err))
-	// 	return
-	// }
+	server.isLoggedIn(ctx, req.UserID)
 
 	arg := db.UpdateNoteParams{
 		ID:          req.NoteID,
@@ -102,17 +84,7 @@ func (server *Server) deleteNote(ctx *gin.Context) {
 		return
 	}
 
-	// loggedInUser, valid := server.validUser(ctx, req.UserID)
-	// if !valid {
-	// 	return
-	// }
-
-	// authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	// if loggedInUser.Username != authPayload.Username {
-	// 	err := errors.New("Logged in user is different with authorization bearer")
-	// 	ctx.JSON(http.StatusUnauthorized, errorResponse(err))
-	// 	return
-	// }
+	server.isLoggedIn(ctx, req.UserID)
 
 	arg := db.DeleteNoteParams{
 		ID:     req.NoteID,
@@ -139,17 +111,7 @@ func (server *Server) getNoteListByUserId(ctx *gin.Context) {
 		return
 	}
 
-	// loggedInUser, valid := server.validUser(ctx, req.UserID)
-	// if !valid {
-	// 	return
-	// }
-
-	// authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-	// if loggedInUser.Username != authPayload.Username {
-	// 	err := errors.New("Logged in user is different with authorization bearer")
-	// 	ctx.JSON(http.StatusUnauthorized, errorResponse(err))
-	// 	return
-	// }
+	server.isLoggedIn(ctx, req.UserID)
 
 	arg := db.ListNotesByUserIdParams{
 		UserID: req.UserID,
@@ -178,4 +140,18 @@ func (server *Server) validUser(ctx *gin.Context, userID int32) (*db.User, bool)
 	}
 
 	return &user, true
+}
+
+func (server *Server) isLoggedIn(ctx *gin.Context, userID int32) {
+	loggedInUser, valid := server.validUser(ctx, userID)
+	if !valid {
+		return
+	}
+
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	if loggedInUser.Username != authPayload.Username {
+		err := errors.New("Logged in user is different with authorization bearer")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
 }
