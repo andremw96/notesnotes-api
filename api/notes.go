@@ -115,7 +115,7 @@ func (server *Server) getNoteListByUserId(ctx *gin.Context) {
 
 	arg := db.ListNotesByUserIdParams{
 		UserID: req.UserID,
-		Limit:  5,
+		Limit:  1000,
 		Offset: 0,
 	}
 

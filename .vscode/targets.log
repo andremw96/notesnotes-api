@@ -7,7 +7,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 
 # This program built for i386-apple-darwin11.3.0
 
-# Make data base, printed on Fri Sep  2 14:08:11 2022
+# Make data base, printed on Fri Nov 11 11:05:43 2022
 
 # Variables
 
@@ -42,13 +42,13 @@ VSCODE_VERBOSE_LOGGING = true
 # environment
 __CFBundleIdentifier = com.microsoft.VSCode
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-99235f23-cb5c-41b9-9127-729836f85aa0.sock
+VSCODE_IPC_HOOK_EXTHOST = /var/folders/3c/7t56_rfs04302dgg6t03qs9h0000gn/T/vscode-ipc-fa78aaa8-4d20-496b-bd90-f48cd2f17ab6.sock
 # environment
 VSCODE_CWD = /
 # environment
 GOPROXY = https://proxy.golang.org,direct
 # environment
-PATH = /Users/quipperindonesia/opt/anaconda3/bin:/Users/quipperindonesia/opt/anaconda3/condabin:/Users/quipperindonesia/.jenv/shims:/Users/quipperindonesia/.jenv/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/quipperindonesia/Desktop/Learning/flutter/flutter/bin:/Users/quipperindonesia/go/bin
+PATH = /Users/quipperindonesia/opt/anaconda3/bin:/Users/quipperindonesia/opt/anaconda3/condabin:/Users/quipperindonesia/.jenv/shims:/Users/quipperindonesia/.jenv/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/quipperindonesia/Desktop/Learning/flutter/flutter/bin:/Users/quipperindonesia/go/bin
 # environment
 LSCOLORS = Gxfxcxdxbxegedabagacad
 # environment
@@ -60,7 +60,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.bB9P426pxZ/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.CqeuNn6efx/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -166,7 +166,7 @@ MAKELEVEL := 0
 # environment
 CONDA_PREFIX = /Users/quipperindonesia/opt/anaconda3
 # environment
-VSCODE_PID = 45522
+VSCODE_PID = 14467
 # environment
 _CE_CONDA = 
 # environment
@@ -293,11 +293,11 @@ generatemock:
 
 startserver:
 #  Phony target (prerequisite of .PHONY).
-#  Implicit rule search has not been done.
-#  File does not exist.
  
 make: *** No rule to make target `all'.  Stop.
 
+#  Implicit rule search has not been done.
+#  File does not exist.
 #  File has not been updated.
 #  commands to execute (from `Makefile', line 26):
 	go run main.go
@@ -367,6 +367,6 @@ migratedown:
 # strcache size: total = 4096 / max = 4096 / min = 4096 / avg = 4096
 # strcache free: total = 4087 / max = 4087 / min = 4087 / avg = 4087
 
-# Finished Make data base on Fri Sep  2 14:08:11 2022
+# Finished Make data base on Fri Nov 11 11:05:43 2022
 
  
